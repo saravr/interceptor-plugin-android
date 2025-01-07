@@ -1,6 +1,6 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import com.example.mobile.android.gradle.internal.ASMifyTask
-import com.example.mobile.android.gradle.internal.BootstrapAndroidSdk
+import com.sandymist.mobile.android.gradle.internal.ASMifyTask
+import com.sandymist.mobile.android.gradle.internal.BootstrapAndroidSdk
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
@@ -28,8 +28,8 @@ repositories {
     google()
 }
 
-group = "com.example.mobile"
-version = "0.0.17"
+group = "com.sandymist.mobile"
+version = "0.1.0"
 
 BootstrapAndroidSdk.locateAndroidSdk(project, extra)
 
@@ -115,8 +115,8 @@ tasks.withType<Test>().configureEach {
 gradlePlugin {
     plugins {
         register("interceptorPlugin") {
-            id = "com.example.mobile.plugin.interceptor"
-            implementationClass = "com.example.mobile.android.gradle.InterceptorPlugin"
+            id = "com.sandymist.mobile.plugin.interceptor"
+            implementationClass = "com.sandymist.mobile.android.gradle.InterceptorPlugin"
         }
     }
 }
@@ -156,7 +156,7 @@ distributions {
     }
 }
 
-tasks.register<com.example.mobile.android.gradle.internal.ASMifyTask>("asmify")
+tasks.register<com.sandymist.mobile.android.gradle.internal.ASMifyTask>("asmify")
 
 afterEvaluate {
     publishing {
