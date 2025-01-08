@@ -21,6 +21,7 @@ plugins {
     // we need this plugin in order to include .aar dependencies into a pure java project, which the gradle plugin is
     id("com.stepango.aar2jar") version BuildPluginsVersion.AAR_2_JAR
     id("com.github.johnrengelman.shadow") version BuildPluginsVersion.SHADOW
+    id("com.gradle.plugin-publish") version "1.3.0"
 }
 
 repositories {
@@ -117,8 +118,16 @@ gradlePlugin {
         register("interceptorPlugin") {
             id = "com.sandymist.mobile.plugin.interceptor"
             implementationClass = "com.sandymist.mobile.android.gradle.InterceptorPlugin"
+            displayName = "Interceptor Plugin for Android"
         }
     }
+}
+
+pluginBundle {
+    website = "https://github.com/saravr/interceptor-plugin"
+    vcsUrl = "https://github.com/saravr/interceptor-plugin"
+    description = "Network interceptor plugin for Android"
+    tags = listOf("android", "interceptor", "okhttp")
 }
 
 tasks.withType<Jar> {
