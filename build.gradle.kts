@@ -29,7 +29,7 @@ repositories {
 }
 
 group = "com.sandymist.mobile"
-version = "0.1.2"
+version = "0.1.2-GEN2"
 
 BootstrapAndroidSdk.locateAndroidSdk(project, extra)
 

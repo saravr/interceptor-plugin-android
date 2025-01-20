@@ -10,4 +10,6 @@ abstract class InterceptorPluginExtension @Inject constructor(project: Project) 
     val tracingInstrumentation: TracingInstrumentationExtension = objects.newInstance(
         TracingInstrumentationExtension::class.java
     )
+
+    var okHTTPInterceptorClass: String? = null
 }

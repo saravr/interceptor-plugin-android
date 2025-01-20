@@ -1,9 +1,12 @@
 package com.sandymist.mobile.android.gradle.instrumentation.okhttp.visitor
 
+import com.sandymist.mobile.android.gradle.InterceptorPlugin
+import com.sandymist.mobile.android.gradle.extensions.InterceptorPluginExtension
 import com.sandymist.mobile.android.gradle.instrumentation.util.Types
 import org.objectweb.asm.Label
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Type
 import org.objectweb.asm.commons.GeneratorAdapter
 import org.objectweb.asm.commons.Method
 
@@ -49,6 +52,10 @@ class ResponseWithInterceptorChainMethodVisitor(
      }
      */
     private fun MethodVisitor.visitAddInterceptor() {
+        val instrumentedClass = InterceptorPlugin.okHTTPInterceptorClass ?: return
+        println("++++ Using instrumented class: $instrumentedClass")
+        val instrumentedClassType = Type.getType(instrumentedClass)
+
         originalVisitor.visitVarInsn(Opcodes.ALOAD, 1) // interceptors list
 
         checkCast(Types.ITERABLE)
@@ -69,7 +76,7 @@ class ResponseWithInterceptorChainMethodVisitor(
         storeLocal(interceptorIndex)
         loadLocal(interceptorIndex)
         checkCast(Types.OKHTTP_INTERCEPTOR)
-        instanceOf(Types.INSTRUMENTED_OKHTTP_INTERCEPTOR)
+        instanceOf(instrumentedClassType)
         ifZCmp(EQ, whileLabel)
         loadLocal(interceptorIndex)
         val ifLabel = Label()
@@ -83,10 +90,10 @@ class ResponseWithInterceptorChainMethodVisitor(
 
         originalVisitor.visitVarInsn(Opcodes.ALOAD, 1)
         checkCast(Types.COLLECTION)
-        newInstance(Types.INSTRUMENTED_OKHTTP_INTERCEPTOR)
+        newInstance(instrumentedClassType)
         dup()
         val interceptorOkHttpCtor = Method.getMethod("void <init> ()")
-        invokeConstructor(Types.INSTRUMENTED_OKHTTP_INTERCEPTOR, interceptorOkHttpCtor)
+        invokeConstructor(instrumentedClassType, interceptorOkHttpCtor)
         val addInterceptor = Method.getMethod("boolean add (Object)")
         invokeInterface(Types.COLLECTION, addInterceptor)
         pop()

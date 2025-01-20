@@ -37,6 +37,12 @@ class InterceptorPlugin : Plugin<Project> {
             InterceptorPluginExtension::class.java,
             project
         )
+
+        project.afterEvaluate {
+            InterceptorPlugin.okHTTPInterceptorClass = extension.okHTTPInterceptorClass // TODO: !!!
+            println("Configured value for OkHTTP interceptor class: ${extension.okHTTPInterceptorClass}")
+        }
+
         project.pluginManager.withPlugin("com.android.application") {
             val androidComponentsExt =
                 project.extensions.getByType(AndroidComponentsExtension::class.java)
@@ -71,5 +77,6 @@ class InterceptorPlugin : Plugin<Project> {
 
     companion object {
         internal val sep = File.separator
+        internal var okHTTPInterceptorClass: String? = null
     }
 }
