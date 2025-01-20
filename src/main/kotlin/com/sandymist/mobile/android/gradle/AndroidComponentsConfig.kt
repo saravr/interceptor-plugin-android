@@ -15,7 +15,6 @@ import com.sandymist.mobile.android.gradle.instrumentation.SpanAddingClassVisito
 import com.sandymist.mobile.android.gradle.services.InterceptorModulesService
 import com.sandymist.mobile.android.gradle.transforms.MetaInfStripTransform
 import com.sandymist.mobile.android.gradle.util.AgpVersions
-import com.sandymist.mobile.android.gradle.util.AgpVersions.isAGP74
 import com.sandymist.mobile.android.gradle.util.collectModules
 import org.gradle.api.Project
 import java.io.File
@@ -99,23 +98,13 @@ private fun <T : InstrumentationParameters> Variant.configureInstrumentation(
     mode: FramesComputationMode,
     instrumentationParamsConfig: (T) -> Unit,
 ) {
-    if (isAGP74) {
-        configureInstrumentationFor74(
-            variant = this,
-            classVisitorFactoryImplClass,
-            scope,
-            mode,
-            instrumentationParamsConfig
-        )
-    } else {
-        configureInstrumentationFor70(
-            variant = this,
-            classVisitorFactoryImplClass,
-            scope,
-            mode,
-            instrumentationParamsConfig
-        )
-    }
+    configureInstrumentationFor74(
+        variant = this,
+        classVisitorFactoryImplClass,
+        scope,
+        mode,
+        instrumentationParamsConfig
+    )
 }
 
 /**
@@ -123,9 +112,5 @@ private fun <T : InstrumentationParameters> Variant.configureInstrumentation(
  * have to distinguish here, although the compatibility sources would look exactly the same.
  */
 private fun AndroidComponentsExtension<*, *, *>.configureVariants(callback: (Variant) -> Unit) {
-    if (isAGP74) {
-        onVariants74(this, callback)
-    } else {
-        onVariants70(this, callback)
-    }
+    onVariants74(this, callback)
 }
